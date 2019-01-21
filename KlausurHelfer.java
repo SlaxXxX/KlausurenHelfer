@@ -1,9 +1,12 @@
 package de.dhbwka.java.exercise._vorlagen;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.*;
 import java.util.List;
+import java.util.EventListener;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -40,14 +43,16 @@ public class KlausurHelfer extends JFrame {
 	// -IO->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	public JPanel IOTAB() {
+		String copyOfWriteFile = "private void writeFile(String s) {\n\t// ORDNER ERSTELLEN\n\tFile myDir = new File(\"myDir\");\n\tmyDir.mkdir();\n\t// DATEI ERSTELLEN\n\tFile fooFile = new File(myDir, \"foo\");\n\ttry {\n\t\tfooFile.createNewFile();\n\t} catch (IOException e) {\n\t\tSystem.err.println(\"Fehler beim Erstellen der Datei: \" + fooFile.getAbsolutePath());\n\t}\n\t// DATEI SCHREIBEN\n\ttry (PrintWriter pw = new PrintWriter(new FileWriter(\"myDir/foo\", true))) {\n\t\tpw.println(s);\n\t\tpw.close();\n\t} catch (IOException e) {\n\t\tSystem.err.println(\"Fehler beim Schreiben: \" + e.getMessage());\n\t}\n}";
+		String copyOfReadFile = "private String readFile() {\n\tString content = \"\";\n\ttry (BufferedReader br = new BufferedReader(new FileReader(\"myDir/foo\"))) {\n\t\tfor (int i = 0; br.ready(); i++) {\n\t\t\tcontent += \"Zeile \" + i + \":  \" + br.readLine() + \"\\n\";\n\t\t}\n\t\tbr.close();\n\t} catch (IOException e) {\n\t\tSystem.err.println(\"Fehler beim Lesen: \" + e.getMessage());\n\t}\n\treturn content;\n}";
+
 		JPanel ioPanel = new JPanel();
-		ioPanel.setLayout(new FlowLayout());
+		ioPanel.setLayout(new GridLayout(0, 2, 20, 20));
 
-		JTextField textField = new JTextField("");
-		JTextArea textArea = new JTextArea("");
-		JButton button = new JButton("Zur Datei hinzufügen");
-
-		textField.setPreferredSize(new Dimension(300, 30));
+		CTextField textField = new CTextField("write to file method", "", copyOfWriteFile);
+		CTextArea textArea = new CTextArea("read a file method", "", copyOfReadFile);
+		CButton button = new CButton("write to file method", "Zur Datei hinzufügen", copyOfWriteFile);
+		textField.setMinimumSize(new Dimension(300, 30));
 		ioPanel.add(textField);
 
 		button.addActionListener((e) -> {
@@ -57,7 +62,7 @@ public class KlausurHelfer extends JFrame {
 		});
 		ioPanel.add(button);
 
-		ioPanel.add(new JLabel("Inhalt der Datei \"myDir/foo\":"));
+		ioPanel.add(new CLabel("read a file method", "Inhalt der Datei \"myDir/foo\":", copyOfReadFile));
 
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
@@ -80,7 +85,7 @@ public class KlausurHelfer extends JFrame {
 		try {
 			fooFile.createNewFile();
 		} catch (IOException e) {
-			System.err.println("Error creating File " + fooFile.getAbsolutePath());
+			System.err.println("Fehler beim Erstellen der Datei: " + fooFile.getAbsolutePath());
 		}
 
 		// DATEI SCHREIBEN
@@ -95,8 +100,9 @@ public class KlausurHelfer extends JFrame {
 	private String readFile() {
 		String content = "";
 		try (BufferedReader br = new BufferedReader(new FileReader("myDir/foo"))) {
-			for (int i = 0; br.ready(); i++)
+			for (int i = 0; br.ready(); i++) {
 				content += "Zeile " + i + ":  " + br.readLine() + "\n";
+			}
 			br.close();
 		} catch (IOException e) {
 			System.err.println("Fehler beim Lesen: " + e.getMessage());
@@ -109,17 +115,24 @@ public class KlausurHelfer extends JFrame {
 	public JPanel COMPONENTSTAB() {
 		JPanel componentPanel = new JPanel();
 
-		componentPanel.setLayout(new BoxLayout(componentPanel, BoxLayout.PAGE_AXIS));
-		componentPanel.add(new JLabel("JLabel"));
-		componentPanel.add(new JTextField("JTextField"));
-		componentPanel.add(new JPasswordField("JPasswordField"));
-		componentPanel.add(new JButton("JButton"));
-		componentPanel.add(new JToggleButton("JToggleButton"));
-		componentPanel.add(new JCheckBox("JCheckBox"));
-		componentPanel.add(new JComboBox<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		componentPanel.setLayout(new GridLayout(0, 1, 20, 20));
+		componentPanel.add(new CLabel("JLabel", "JLabel", "JLabel label = new JLabel(\"label\");"));
+		componentPanel.add(
+				new CTextField("JTextField", "JTextField", "JTextField textField = new JTextField(\"textField\");"));
+		componentPanel.add(new CPasswordField("JPasswordField", "JPasswordField",
+				"JPasswordField passwordField = new JPasswordField(\"passwordField\");"));
+		componentPanel.add(new CButton("JButton", "JButton", "JButton button = new JButton(\"button\");"));
+		componentPanel.add(new CToggleButton("JToggleButton", "JToggleButton",
+				"JToggleButton toggleButton = new JToggleButton(\"toggleButton\");"));
+		componentPanel
+				.add(new CCheckBox("JCheckBox", "JCheckBox", "JCheckBox checkBox = new JCheckBox(\"checkBox\");"));
+		componentPanel.add(new CComboBox<String>("JComboBox",
+				"JComboBox comboBox = new JComboBox<String>(new String[] { \"Item 1\", \"Item 2\" });",
+				new String[] { "Item 1", "Item 2" }));
 		ButtonGroup group = new ButtonGroup();
 		for (int i = 1; i <= 3; i++) {
-			JRadioButton rb = new JRadioButton("Radio-Button-" + i);
+			CRadioButton rb = new CRadioButton("JRadioButton", "Radio-Button-" + i,
+					"ButtonGroup group = new ButtonGroup();\nint buttonCount = 5; //Set the amount of buttons needed here\nfor (int i = 1; i <= 3; i++) {\n\tJRadioButton radioButton = new JRadioButton(\"button nr.\" + i);\n\tgroup.add(radioButton);\n\tthis.getContentPane().add(radioButton); //replace this.getContentPane() with the content container you're using\n}");
 			group.add(rb);
 			componentPanel.add(rb);
 		}
@@ -131,10 +144,13 @@ public class KlausurHelfer extends JFrame {
 
 	public JPanel LAYOUTSTAB() {
 		JPanel layoutPanel = new JPanel();
+		String copyOfBorderLayout = "borderPanel.setLayout(new BorderLayout(2/* <- spaltbreite */, 2/* <- spalthöhe */));\nborderPanel.add(new JButton(), BorderLayout.NORTH);\nborderPanel.add(new JButton(), BorderLayout.SOUTH);\nborderPanel.add(new JButton(), BorderLayout.WEST);\nborderPanel.add(new JButton(), BorderLayout.EAST);\nborderPanel.add(new JButton(), BorderLayout.CENTER);";
+		String copyOfFlowLayout = "flowPanel.setLayout(new FlowLayout());\nflowPanel.add(new JButton());// Elemente werden so lange nebeneinander eingefügt, bis die Zeile voll ist.";
+		String copyOfGridLayout = "gridPanel.setLayout(new GridLayout(2/* <- anzahl spalten */, 2/* <- anzahl zeilen */));\ngridPanel.add(new JButton());// Elemente werden von links nach rechts und dann von oben nach unten in das Layout eingefügt (eine position anzugeben ist nicht möglich)";
 
-		JPanel borderPanel = new JPanel();
-		JPanel flowPanel = new JPanel();
-		JPanel gridPanel = new JPanel();
+		CPanel borderPanel = new CPanel("BorderLayout", copyOfBorderLayout);
+		CPanel flowPanel = new CPanel("FlowLayout", copyOfFlowLayout);
+		CPanel gridPanel = new CPanel("GridLayout", copyOfGridLayout);
 
 		layoutPanel.setLayout(
 				new GridLayout(2/* anzahl spalten */, 2/* anzahl zeilen */));
@@ -144,25 +160,25 @@ public class KlausurHelfer extends JFrame {
 		layoutPanel.add(gridPanel);
 
 		borderPanel.setLayout(new BorderLayout(2, 2));
-		borderPanel.add(new JButton("BORDER_N"), BorderLayout.NORTH);
-		borderPanel.add(new JButton("BORDER_S"), BorderLayout.SOUTH);
-		borderPanel.add(new JButton("BORDER_W"), BorderLayout.WEST);
-		borderPanel.add(new JButton("BORDER_E"), BorderLayout.EAST);
-		borderPanel.add(new JButton("BORDER_C"), BorderLayout.CENTER);
+		borderPanel.add(new CButton("BorderLayout", "BORDER_N", copyOfBorderLayout), BorderLayout.NORTH);
+		borderPanel.add(new CButton("BorderLayout", "BORDER_S", copyOfBorderLayout), BorderLayout.SOUTH);
+		borderPanel.add(new CButton("BorderLayout", "BORDER_W", copyOfBorderLayout), BorderLayout.WEST);
+		borderPanel.add(new CButton("BorderLayout", "BORDER_E", copyOfBorderLayout), BorderLayout.EAST);
+		borderPanel.add(new CButton("BorderLayout", "BORDER_C", copyOfBorderLayout), BorderLayout.CENTER);
 		borderPanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 
 		flowPanel.setLayout(new FlowLayout());
-		flowPanel.add(new JButton("FLOW_1"));
-		flowPanel.add(new JButton("FLOW_2"));
-		flowPanel.add(new JButton("FLOW_3"));
-		flowPanel.add(new JButton("FLOW_4"));
+		flowPanel.add(new CButton("FlowLayout", "FLOW_1", copyOfFlowLayout));
+		flowPanel.add(new CButton("FlowLayout", "FLOW_2", copyOfFlowLayout));
+		flowPanel.add(new CButton("FlowLayout", "FLOW_3", copyOfFlowLayout));
+		flowPanel.add(new CButton("FlowLayout", "FLOW_4", copyOfFlowLayout));
 		flowPanel.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
 
 		gridPanel.setLayout(new GridLayout(2, 2));
-		gridPanel.add(new JButton("GRID_1,1"));
-		gridPanel.add(new JButton("GRID_1,2"));
-		gridPanel.add(new JButton("GRID_2,1"));
-		gridPanel.add(new JButton("GRID_2,2"));
+		gridPanel.add(new CButton("GridLayout", "GRID_1,1", copyOfGridLayout));
+		gridPanel.add(new CButton("GridLayout", "GRID_1,2", copyOfGridLayout));
+		gridPanel.add(new CButton("GridLayout", "GRID_2,1", copyOfGridLayout));
+		gridPanel.add(new CButton("GridLayout", "GRID_2,2", copyOfGridLayout));
 		gridPanel.setBorder(BorderFactory.createLineBorder(Color.green, 3));
 
 		return layoutPanel;
@@ -172,10 +188,9 @@ public class KlausurHelfer extends JFrame {
 
 	public JPanel EVENTSTAB() {
 		JPanel eventPanel = new JPanel();
-
-		JButton button = new JButton("Klick mich");
-		JTextField textField = new JTextField("Schreib was");
-		JToggleButton toggle = new JToggleButton("Toggle mich");
+		CButton button = new CButton("Lambda Listener","Klick mich (Lambda | Recommended)","button.addActionListener((e)->{\n\t//Hier hinschreiben was passieren soll\n});");
+		CTextField textField = new CTextField("Subclass Listener","Schreib was (Subclass)","private class subclass implements ActionListener {\n\t@Override\n\tpublic void actionPerformed(ActionEvent e) {\n\t\t//Hier hinschreiben was passieren soll\n\t}\n}");
+		CToggleButton toggle = new CToggleButton("Inner Anonymous Listener","Toggle mich (Inner Anonymous)","button.addActionListener(new ActionListener() {\n\t@Override\n\tpublic void actionPerformed(ActionEvent e) {\n\t\t//Hier hinschreiben was passieren soll\n\t}\n});");
 
 		JLabel jl1 = new JLabel();
 		JLabel jl2 = new JLabel();
@@ -238,11 +253,11 @@ public class KlausurHelfer extends JFrame {
 	// -THREADS->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	public JPanel THREADSTAB() {
-		JPanel threadPanel = new JPanel();
+		CPanel threadPanel = new CPanel("Thread (Lambda)","new Thread(() -> {\n\t//Hier Logik des Threads. Merke: Der Thread läuft nur einmal durch, while-Schleife nicht vergessen falls nötig\n}).start(); //Falls Thread nicht gleich starten soll .start() entfernen");
 		JLabel label = new JLabel("PARTEY");
 		label.setFont(new Font("Arial", Font.BOLD, 150));
 		threadPanel.add(label);
-
+		
 		new Thread(new Runnable() {
 
 			@Override
@@ -282,7 +297,7 @@ public class KlausurHelfer extends JFrame {
 				new Party(5.1f, "Andere", Color.DARK_GRAY) };
 		double maxPercentageOfParties = 40f;
 
-		JPanel paintPanel = new JPanel() {
+		CPanel paintPanel = new CPanel("Painting Essentials","JPanel paintingPanel = new JPanel() {\n\t@Override\n\tpublic void paintComponent(Graphics g) {\n\t\tg.setColor(Color.BLACK);\n\t\tg.drawLine(0, 0, 1, 1);\n\t\tg.fillRect(0, 0, 30, 30);\n\t\tg.drawString(\"\", 0, 0);\n\t}\n};") {
 			@Override
 			public void paintComponent(Graphics g) {
 				final int width = this.getWidth();
@@ -522,7 +537,182 @@ public class KlausurHelfer extends JFrame {
 
 	// -MAIN->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+	static KlausurHelfer instance;
+
 	public static void main(String[] args) {
-		new KlausurHelfer();
+		instance = new KlausurHelfer();
+		ToolTipManager.sharedInstance().setDismissDelay(700);
+	}
+
+	// -LOGIC FOR COPY TOOLTIP, NOT RELEVANT FOR
+	// KLAUSUR->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	static class CopyTooltip {
+		static Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+		public static void putToClip(String content) {
+			StringSelection selection = new StringSelection(content);
+			clipboard.setContents(selection, selection);
+		}
+	}
+
+	class CButton extends JButton {
+		private String content;
+
+		public CButton(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CLabel extends JLabel {
+		private String content;
+
+		public CLabel(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CTextField extends JTextField {
+		private String content;
+
+		public CTextField(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CPasswordField extends JPasswordField {
+		private String content;
+
+		public CPasswordField(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CToggleButton extends JToggleButton {
+		private String content;
+
+		public CToggleButton(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CCheckBox extends JCheckBox {
+		private String content;
+
+		public CCheckBox(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CComboBox<E> extends JComboBox<E> {
+		private String content;
+
+		public CComboBox(String tooltip, String content, E... args) {
+			super(args);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CRadioButton extends JRadioButton {
+		private String content;
+
+		public CRadioButton(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CTextArea extends JTextArea {
+		private String content;
+
+		public CTextArea(String tooltip, String name, String content) {
+			super(name);
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
+	}
+
+	class CPanel extends JPanel {
+		private String content;
+
+		public CPanel(String tooltip, String content) {
+			super();
+			this.content = content;
+			super.setToolTipText("copied " + tooltip);
+		}
+
+		@Override
+		public String getToolTipText() {
+			CopyTooltip.putToClip(content);
+			return super.getToolTipText();
+		}
 	}
 }
