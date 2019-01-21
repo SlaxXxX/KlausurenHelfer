@@ -4,14 +4,14 @@ Jetzt mit instant copy Funktion.
 ## How to use
 1. KlausurHelfer in die lokale IDE kopieren/importieren und starten (Rechtsklick -> Run as -> Java Application)
 2. Über die Tabs zum benötigten Element navigieren und mit der Maus drauf zeigen (nicht klicken)
-3. Warten bis die Nachricht "copied <Element>" kommt und wieder verschwindet
+3. Warten bis die Nachricht "`copied <Element>`" kommt und wieder verschwindet
 4. An die Stelle gehen wo das Element benötigt wird und einfügen (Strg+C)
 
 ## Contents
 #### IO
-Beim Kopieren (Nach Punkt How to use) des Eingabefensters oder des Knopfes "Zur Datei hinzufügen" wird eine Methode zum Schreiben eines Strings in eine Datei in die Zwischenablage Kopiert
+Beim Kopieren (Nach Punkt How to use) des Eingabefensters oder des Knopfes `Zur Datei hinzufügen` wird eine Methode zum Schreiben eines Strings in eine Datei in die Zwischenablage Kopiert
 
-Beim Kopieren des "Inhalt der Datei "myDir/foo" Labels oder des Datei-Inhalt-Ausgabefensters wird eine Methode zum Auslesen von Dateien kopiert
+Beim Kopieren des `Inhalt der Datei "myDir/foo` Labels oder des Datei-Inhalt-Ausgabefensters wird eine Methode zum Auslesen von Dateien kopiert
 #### COMPONENTS
 Hier wird die Deklaration und Initialisierung der entsprechenden Swing Komponente kopiert
 
