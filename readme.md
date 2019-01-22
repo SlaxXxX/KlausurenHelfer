@@ -16,6 +16,8 @@ Beim Kopieren des `Inhalt der Datei "myDir/foo` Labels oder des Datei-Inhalt-Aus
 Hier wird die Deklaration und Initialisierung der entsprechenden Swing Komponente kopiert
 
 Bei den RadioButtons wird direkt eine ButtonGroup mitdefiniert, welche für RadioButtons nötig ist
+
+Für JFrame und Dialogs: Der Button der die Preview aufruft enthält hier den Kopiertext, nicht die preview Fenster selbst
 #### LAYOUTS
 Hier wird das entsprechende Layout kopiert und eine Beispielkomponente für jede Art wie man in diesem Layout Komponenten hinzufügen kann
 #### EVENTS

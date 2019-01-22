@@ -5,6 +5,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.*;
+import java.security.MessageDigestSpi;
 import java.util.List;
 import java.util.EventListener;
 import java.util.LinkedList;
@@ -115,7 +116,24 @@ public class KlausurHelfer extends JFrame {
 	public JPanel COMPONENTSTAB() {
 		JPanel componentPanel = new JPanel();
 
-		componentPanel.setLayout(new GridLayout(0, 1, 20, 20));
+		componentPanel.setLayout(new GridLayout(0, 1, 10, 10));	
+		
+		CLabel window = new CLabel("Window Setup", "Complete Window Setup", "public class Terminal extends JFrame {\n\n\tpublic Terminal(String title) {\n\t\tsuper(title);\n\t\tfillPane(this.getContentPane());\n\t\tthis.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\n\t\tthis.setSize(200, 100);\n\t\tthis.setVisible(true);\n\t}\n\n\tpublic void fillPane(Container contentPane) {\n\t\tcontentPane.setLayout(new GridLayout(0, 1));\n\t\tJLabel label = new JLabel(\"Click the Button!\");\n\t\tJButton button = new JButton(\"Button\");\n\t\tbutton.addActionListener(e -> label.setText(\"Good job!\"));\n\t\tcontentPane.add(label);\n\t\tcontentPane.add(button);\n\t}\n\n}");
+		window.setOpaque(true);
+		window.setBackground(Color.GREEN);
+		componentPanel.add(window);
+		
+		CButton jFrame = new CButton("JFrame", "JFrame (Click for preview)", "// Am besten lässt du aber die Klasse die den JFrame anzeigt direkt JFrame erweitern (class deineKlasse extends JFrame {...} ) und ersetzt dann alle 'frame.' mit 'this.'\nJFrame frame = new JFrame(\"Titel\");\nframe.getContentPane().add(new JLabel(\"I am a JFrame!\"));\nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\nframe.setSize(200, 100);\nframe.setVisible(true);");
+		jFrame.addActionListener(e -> {
+			JFrame frame = new JFrame("JFrame");
+			frame.getContentPane().add(new JLabel("I am a JFrame!"));
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frame.setSize(200, 100);
+			frame.setVisible(true);
+		});
+		
+		componentPanel.add(jFrame);
+		
 		componentPanel.add(new CLabel("JLabel", "JLabel", "JLabel label = new JLabel(\"label\");"));
 		componentPanel.add(
 				new CTextField("JTextField", "JTextField", "JTextField textField = new JTextField(\"textField\");"));
@@ -136,10 +154,17 @@ public class KlausurHelfer extends JFrame {
 			group.add(rb);
 			componentPanel.add(rb);
 		}
-
+		
+		CButton messageDialog = new CButton("Message Dialog", "Message Dialog (Click for preview)", "JOptionPane.showMessageDialog(this /* wenn das aufrufende Objekt (this) keine awt.Component ist (z.B JFrame), this mit null ersetzen */, \"Message\", \"Title\", JOptionPane.INFORMATION_MESSAGE);");
+		messageDialog.addActionListener(e -> JOptionPane.showMessageDialog(this, "Hi, I am informative", "Info", JOptionPane.INFORMATION_MESSAGE));
+		componentPanel.add(messageDialog);
+		
+		CButton inputDialog = new CButton("Input Dialog", "Input Dialog (Click for preview)", "String enteredString = JOptionPane.showInputDialog(this /* wenn das aufrufende Objekt (this) keine awt.Component ist (z.B JFrame), this mit null ersetzen */, \"Message\");");
+		inputDialog.addActionListener(e -> JOptionPane.showInputDialog(this, "Gib hier deine Kreditkartennummer ein:"));
+		componentPanel.add(inputDialog);
 		return componentPanel;
 	}
-
+	
 	// -LAYOUTS->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	public JPanel LAYOUTSTAB() {
@@ -576,7 +601,7 @@ public class KlausurHelfer extends JFrame {
 		private String content;
 
 		public CLabel(String tooltip, String name, String content) {
-			super(name);
+			super(name, SwingConstants.CENTER);
 			this.content = content;
 			super.setToolTipText("copied " + tooltip);
 		}
