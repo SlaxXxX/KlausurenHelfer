@@ -118,7 +118,7 @@ public class KlausurHelfer extends JFrame {
 
 		componentPanel.setLayout(new GridLayout(0, 1, 10, 10));	
 		
-		CLabel window = new CLabel("Window Setup", "Complete Window Setup", "public class Terminal extends JFrame {\n\n\tpublic Terminal(String title) {\n\t\tsuper(title);\n\t\tfillPane(this.getContentPane());\n\t\tthis.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\n\t\tthis.setSize(200, 100);\n\t\tthis.setVisible(true);\n\t}\n\n\tpublic void fillPane(Container contentPane) {\n\t\tcontentPane.setLayout(new GridLayout(0, 1));\n\t\tJLabel label = new JLabel(\"Click the Button!\");\n\t\tJButton button = new JButton(\"Button\");\n\t\tbutton.addActionListener(e -> label.setText(\"Good job!\"));\n\t\tcontentPane.add(label);\n\t\tcontentPane.add(button);\n\t}\n\n}");
+		CLabel window = new CLabel("Window Setup", "Complete Window Setup", "public class Terminal extends JFrame {\n\n\tpublic Terminal(String title) {\n\t\tsuper(title);\n\t\tsetupContent(this.getContentPane());\n\t\tthis.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);\n\t\tthis.setSize(300, 200);\n\t\tthis.setVisible(true);\n\t}\n\n\tpublic void setupContent(Container contentPane) {\n\t\tcontentPane.setLayout(new GridLayout(0, 1));\n\t\tJLabel label = new JLabel(\"Click the Button!\");\n\t\tJButton button = new JButton(\"Button\");\n\t\tbutton.addActionListener(e -> label.setText(\"Good job!\"));\n\t\tcontentPane.add(label);\n\t\tcontentPane.add(button);\n\t}\n\n}");
 		window.setOpaque(true);
 		window.setBackground(Color.GREEN);
 		componentPanel.add(window);
