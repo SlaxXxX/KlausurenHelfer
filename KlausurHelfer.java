@@ -1,4 +1,4 @@
-package de.dhbwka.java.exercise._vorlagen;
+package de.dhbwka.java.klausurHelfer;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
