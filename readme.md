@@ -5,7 +5,7 @@ Jetzt mit instant copy Funktion.
 1. KlausurHelfer in die lokale IDE kopieren/importieren und starten (Rechtsklick -> Run as -> Java Application)
 2. Über die Tabs zum benötigten Element navigieren und mit der Maus drauf zeigen (nicht klicken)
 3. Warten bis die Nachricht "`copied <Element>`" kommt und wieder verschwindet
-4. An die Stelle gehen wo das Element benötigt wird und einfügen (Strg+C)
+4. An die Stelle gehen wo das Element benötigt wird und einfügen (Strg+V)
 
 ## Contents
 #### IO
